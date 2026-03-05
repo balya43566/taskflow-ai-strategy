@@ -4,422 +4,543 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TaskFlow · AI Competitive Response Strategy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --navy:       #0d1b2a;
-      --blue:       #2d6acf;
-      --blue-pale:  #ebf3ff;
+      --navy-mid:   #1b3a6b;
+      --blue:       #2563eb;
+      --blue-light: #3b82f6;
+      --blue-pale:  #eff6ff;
       --red:        #dc2626;
-      --red-pale:   #ffeded;
-      --amber:      #c06b00;
-      --amber-pale: #fff3d6;
-      --green:      #057a55;
-      --green-pale: #d6f5eb;
-      --gray-100:   #f1f5f9;
-      --gray-200:   #e2e8f0;
-      --gray-400:   #94a3b8;
-      --gray-600:   #47556e;
+      --red-pale:   #fef2f2;
+      --amber:      #b45309;
+      --amber-pale: #fffbeb;
+      --green:      #047857;
+      --green-pale: #ecfdf5;
+      --gray-50:    #f9fafb;
+      --gray-100:   #f3f4f6;
+      --gray-200:   #e5e7eb;
+      --gray-300:   #d1d5db;
+      --gray-400:   #9ca3af;
+      --gray-500:   #6b7280;
+      --gray-600:   #4b5563;
+      --gray-800:   #1f2937;
       --white:      #ffffff;
+      --shadow-sm:  0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+      --shadow-md:  0 4px 6px -1px rgba(0,0,0,.08), 0 2px 4px -2px rgba(0,0,0,.05);
+      --shadow-lg:  0 10px 15px -3px rgba(0,0,0,.08), 0 4px 6px -4px rgba(0,0,0,.05);
+      --shadow-xl:  0 20px 25px -5px rgba(0,0,0,.08), 0 8px 10px -6px rgba(0,0,0,.05);
     }
 
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-      background: var(--gray-100);
-      color: var(--navy);
+      font-family: "Inter", system-ui, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
 
     a { color: var(--blue); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    /* ── Hero ── */
+    /* ── Sticky Nav ────────────────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(13, 27, 42, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 32px;
+    }
+    .nav-inner {
+      max-width: 960px; margin: 0 auto;
+      display: flex; align-items: center;
+      height: 52px; gap: 0;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 700; color: white;
+      margin-right: auto; text-decoration: none;
+    }
+    .nav-logo:hover { text-decoration: none; }
+    .nav-logo-dot { width: 8px; height: 8px; border-radius: 2px; background: var(--blue-light); }
+    .nav-logo span { color: var(--blue-light); }
+    .nav-links {
+      display: flex; gap: 4px; list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.55); font-size: 13px; font-weight: 500;
+      padding: 6px 12px; border-radius: 6px;
+      transition: all .15s;
+    }
+    .nav-links a:hover {
+      color: white; background: rgba(255,255,255,0.08);
+      text-decoration: none;
+    }
+    @media (max-width: 600px) { .nav-links { display: none; } }
+
+    /* ── Hero ──────────────────────────────────────────────────────────────── */
     .hero {
       background: var(--navy);
-      color: white;
-      padding: 80px 40px 60px;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
+      padding: 88px 32px 72px;
     }
-    .hero::after {
-      content: ">";
-      position: absolute;
-      right: 6%;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 220px;
-      font-weight: 900;
-      color: rgba(255,255,255,0.04);
-      line-height: 1;
+    /* Gradient orbs */
+    .hero::before {
+      content: "";
+      position: absolute; top: -120px; right: -80px;
+      width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(37,99,235,.18) 0%, transparent 70%);
       pointer-events: none;
     }
-    .hero-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+    .hero::after {
+      content: "";
+      position: absolute; bottom: -100px; left: 20%;
+      width: 400px; height: 400px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,130,246,.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    /* Dot grid */
+    .hero-dots {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .hero-inner {
+      max-width: 960px; margin: 0 auto;
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center;
+    }
+    @media (max-width: 700px) { .hero-inner { grid-template-columns: 1fr; } }
 
     .logo {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 36px;
+      display: inline-flex; align-items: center; gap: 10px;
+      margin-bottom: 28px;
     }
     .logo-icon {
-      width: 48px; height: 48px;
-      background: var(--navy);
-      border: 2px solid rgba(255,255,255,0.15);
-      border-radius: 10px;
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,.05);
+      border: 1.5px solid rgba(255,255,255,.15);
+      border-radius: 9px;
       display: flex; flex-direction: column;
-      justify-content: center;
-      padding: 8px 10px;
-      gap: 5px;
-      position: relative;
-      overflow: hidden;
+      justify-content: center; padding: 7px 9px; gap: 4px;
+      position: relative; overflow: hidden;
     }
     .logo-icon::after {
-      content: "";
-      position: absolute;
+      content: ""; position: absolute;
       bottom: 0; right: 0;
-      width: 14px; height: 14px;
+      width: 11px; height: 11px;
       background: var(--blue);
     }
-    .logo-row {
-      display: flex; align-items: center; gap: 5px;
-    }
+    .logo-row { display: flex; align-items: center; gap: 4px; }
     .logo-check {
-      width: 9px; height: 9px;
-      background: var(--blue);
-      border-radius: 2px;
-      flex-shrink: 0;
+      width: 7px; height: 7px; border-radius: 1.5px; flex-shrink: 0;
     }
-    .logo-row:first-child .logo-check { background: var(--blue); }
-    .logo-row:not(:first-child) .logo-check { background: rgba(255,255,255,0.4); }
-    .logo-line {
-      height: 2px;
-      border-radius: 2px;
-      background: white;
-    }
-    .logo-row:last-child .logo-line { background: rgba(255,255,255,0.3); width: 60% !important; }
-
-    .logo-wordmark { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-    .logo-wordmark span { color: var(--blue); }
+    .logo-row:first-child .logo-check { background: var(--blue-light); }
+    .logo-row:not(:first-child) .logo-check { background: rgba(255,255,255,.35); }
+    .logo-line { height: 2px; border-radius: 2px; }
+    .logo-row:first-child .logo-line { background: rgba(255,255,255,.9); }
+    .logo-row:not(:first-child) .logo-line { background: rgba(255,255,255,.3); }
+    .logo-row:last-child .logo-line { width: 60% !important; }
+    .logo-wordmark { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; color: white; }
+    .logo-wordmark span { color: var(--blue-light); }
 
     .badge {
-      display: inline-block;
-      background: var(--red);
-      color: white;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 4px;
-      margin-bottom: 20px;
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(220,38,38,.15); border: 1px solid rgba(220,38,38,.3);
+      color: #fca5a5; font-size: 11px; font-weight: 600;
+      letter-spacing: .8px; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 20px; margin-bottom: 18px;
     }
+    .badge::before { content: "●"; font-size: 6px; }
 
     .hero h1 {
-      font-size: clamp(28px, 5vw, 52px);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -1px;
-      margin-bottom: 16px;
+      font-size: clamp(30px, 5vw, 54px);
+      font-weight: 900; line-height: 1.08;
+      letter-spacing: -1.5px; color: white;
+      margin-bottom: 18px;
     }
-    .hero h1 span { color: #7bb3f0; }
+    .hero h1 em { font-style: normal; color: #93c5fd; }
 
-    .hero p {
-      font-size: 17px;
-      color: rgba(255,255,255,0.6);
-      max-width: 560px;
-      margin-bottom: 32px;
+    .hero-sub {
+      font-size: 16px; color: rgba(255,255,255,.55);
+      max-width: 480px; margin-bottom: 36px; line-height: 1.7;
     }
 
-    .hero-meta {
-      font-size: 13px;
-      color: rgba(255,255,255,0.35);
-      border-top: 1px solid rgba(255,255,255,0.08);
-      padding-top: 24px;
-      margin-top: 8px;
-    }
-
-    /* ── Download bar ── */
-    .download-bar {
-      background: var(--blue);
-      padding: 18px 40px;
-    }
-    .download-bar-inner {
-      max-width: 900px; margin: 0 auto;
-      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
-    }
-    .download-bar p { color: rgba(255,255,255,0.85); font-size: 14px; margin-right: auto; }
+    .hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; }
     .btn {
       display: inline-flex; align-items: center; gap: 7px;
-      padding: 9px 18px;
-      border-radius: 6px;
-      font-size: 13px;
-      font-weight: 600;
-      transition: opacity .15s;
+      padding: 10px 20px; border-radius: 8px;
+      font-size: 13px; font-weight: 600;
+      transition: all .15s; cursor: pointer;
     }
-    .btn:hover { opacity: .85; text-decoration: none; }
-    .btn-white { background: white; color: var(--navy); }
-    .btn-outline { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,.4); }
+    .btn:hover { text-decoration: none; transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--blue); color: white;
+      box-shadow: 0 0 0 0 rgba(37,99,235,0);
+    }
+    .btn-primary:hover { background: var(--blue-light); box-shadow: 0 4px 14px rgba(37,99,235,.4); }
+    .btn-ghost {
+      background: rgba(255,255,255,.07); color: rgba(255,255,255,.8);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.12); color: white; }
 
-    /* ── Layout ── */
-    .page { max-width: 900px; margin: 0 auto; padding: 48px 40px 80px; }
-
-    section { margin-bottom: 56px; }
-
-    .section-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--blue);
-      margin-bottom: 8px;
+    .hero-meta {
+      margin-top: 40px; padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,.07);
+      font-size: 12px; color: rgba(255,255,255,.3);
+      display: flex; gap: 20px; flex-wrap: wrap;
     }
 
+    /* Hero right — key stats card */
+    .hero-stats-card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 16px; padding: 24px;
+      min-width: 220px; backdrop-filter: blur(8px);
+    }
+    .hero-stat { margin-bottom: 20px; }
+    .hero-stat:last-child { margin-bottom: 0; }
+    .hero-stat-num {
+      font-size: 32px; font-weight: 900; line-height: 1;
+      letter-spacing: -1px; margin-bottom: 3px;
+    }
+    .hero-stat-label { font-size: 11px; color: rgba(255,255,255,.4); line-height: 1.4; }
+    .hero-stat-divider { height: 1px; background: rgba(255,255,255,.07); margin: 16px 0; }
+
+    /* ── Page ──────────────────────────────────────────────────────────────── */
+    .page { max-width: 960px; margin: 0 auto; padding: 56px 32px 96px; }
+    section { margin-bottom: 64px; }
+
+    .section-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--blue);
+      margin-bottom: 6px;
+    }
     h2 {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      margin-bottom: 24px;
-      padding-bottom: 14px;
+      font-size: 28px; font-weight: 800; letter-spacing: -0.5px;
+      color: var(--navy); margin-bottom: 28px;
+      padding-bottom: 16px;
       border-bottom: 2px solid var(--gray-200);
     }
 
-    h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    /* ── Fade-in on scroll ────────────────────────────────────────────────── */
+    .fade-in {
+      opacity: 0; transform: translateY(20px);
+      transition: opacity .5s ease, transform .5s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: none; }
 
-    /* ── Stat cards ── */
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+    /* ── Stat cards ────────────────────────────────────────────────────────── */
+    .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 28px; }
     @media (max-width: 640px) { .stats { grid-template-columns: 1fr; } }
-
     .stat-card {
-      border-radius: 10px;
-      padding: 22px 20px;
-      border-left: 5px solid;
+      border-radius: 14px; padding: 24px 22px;
+      border: 1px solid transparent;
+      transition: transform .2s, box-shadow .2s;
     }
-    .stat-card.blue  { background: var(--blue-pale);  border-color: var(--blue); }
-    .stat-card.red   { background: var(--red-pale);   border-color: var(--red); }
-    .stat-card.amber { background: var(--amber-pale); border-color: var(--amber); }
-
-    .stat-number {
-      font-size: 40px;
-      font-weight: 900;
-      line-height: 1;
-      margin-bottom: 6px;
-    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .stat-card.blue  { background: var(--blue-pale);  border-color: #bfdbfe; }
+    .stat-card.red   { background: var(--red-pale);   border-color: #fecaca; }
+    .stat-card.amber { background: var(--amber-pale); border-color: #fde68a; }
+    .stat-number { font-size: 42px; font-weight: 900; letter-spacing: -1px; line-height: 1; margin-bottom: 8px; }
     .stat-card.blue  .stat-number { color: var(--blue); }
     .stat-card.red   .stat-number { color: var(--red); }
     .stat-card.amber .stat-number { color: var(--amber); }
-    .stat-label { font-size: 13px; color: var(--gray-600); }
+    .stat-label { font-size: 13px; color: var(--gray-600); line-height: 1.5; }
 
-    /* ── Takeaways ── */
-    .takeaways { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    /* ── Takeaways ─────────────────────────────────────────────────────────── */
+    .takeaways { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media (max-width: 600px) { .takeaways { grid-template-columns: 1fr; } }
     .takeaway {
-      display: flex; gap: 12px; align-items: flex-start;
+      display: flex; gap: 14px; align-items: flex-start;
       background: white; border: 1px solid var(--gray-200);
-      border-radius: 8px; padding: 16px;
+      border-radius: 12px; padding: 18px;
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s, box-shadow .2s;
     }
+    .takeaway:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
     .takeaway-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      flex-shrink: 0; margin-top: 5px;
+      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
     }
-    .takeaway strong { display: block; font-size: 13px; margin-bottom: 3px; }
-    .takeaway p { font-size: 13px; color: var(--gray-600); }
+    .takeaway strong { display: block; font-size: 13px; font-weight: 700; margin-bottom: 4px; color: var(--gray-800); }
+    .takeaway p { font-size: 13px; color: var(--gray-500); line-height: 1.5; }
 
-    /* ── Tier cards ── */
+    /* ── Tier cards ────────────────────────────────────────────────────────── */
     .tier {
-      border-radius: 10px; border: 1px solid var(--gray-200);
-      overflow: hidden; margin-bottom: 12px;
+      border-radius: 12px; border: 1px solid var(--gray-200);
+      background: white; overflow: hidden; margin-bottom: 10px;
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s, box-shadow .2s;
     }
-    .tier-header {
-      display: flex; align-items: center; gap: 14px;
-      padding: 14px 18px;
-    }
+    .tier:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .tier-header { display: flex; align-items: center; gap: 14px; padding: 16px 20px; }
     .tier-badge {
-      font-size: 10px; font-weight: 700; letter-spacing: 1px;
-      text-transform: uppercase; padding: 4px 10px;
-      border-radius: 4px; color: white; white-space: nowrap;
+      font-size: 10px; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; padding: 5px 12px;
+      border-radius: 20px; color: white; white-space: nowrap; flex-shrink: 0;
     }
-    .tier-tools { font-size: 15px; font-weight: 700; }
+    .tier-tools { font-size: 15px; font-weight: 700; color: var(--gray-800); }
     .tier-body {
-      padding: 12px 18px 14px;
-      font-size: 13px; color: var(--gray-600);
-      border-top: 1px solid var(--gray-200);
-      background: var(--gray-100);
+      padding: 12px 20px 16px; font-size: 13px; color: var(--gray-500);
+      border-top: 1px solid var(--gray-100); background: var(--gray-50);
+      line-height: 1.6;
     }
 
-    /* ── Table ── */
-    .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--gray-200); }
+    /* ── Table ─────────────────────────────────────────────────────────────── */
+    .table-wrap {
+      overflow-x: auto; border-radius: 12px;
+      border: 1px solid var(--gray-200); box-shadow: var(--shadow-sm);
+    }
     table { width: 100%; border-collapse: collapse; font-size: 13px; background: white; }
-    thead tr { background: var(--navy); color: white; }
-    thead th { padding: 11px 14px; text-align: left; font-size: 11px; letter-spacing: .5px; }
+    thead tr { background: var(--navy); }
+    thead th {
+      padding: 13px 16px; text-align: left;
+      font-size: 11px; font-weight: 600; letter-spacing: .5px;
+      color: rgba(255,255,255,.7);
+    }
     thead th:not(:first-child) { text-align: center; }
-    tbody tr:nth-child(even) { background: var(--gray-100); }
-    tbody td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); }
+    tbody tr { transition: background .1s; }
+    tbody tr:nth-child(even) { background: var(--gray-50); }
+    tbody tr:hover { background: var(--blue-pale); }
+    tbody td { padding: 11px 16px; border-bottom: 1px solid var(--gray-100); }
     tbody td:not(:first-child) { text-align: center; }
+    tbody td:first-child { font-weight: 500; color: var(--gray-700, #374151); }
     tbody tr:last-child td { border-bottom: none; }
 
     .pill {
-      display: inline-block; padding: 2px 10px;
+      display: inline-block; padding: 3px 10px;
       border-radius: 20px; font-size: 11px; font-weight: 600;
     }
-    .pill.yes    { background: var(--green-pale); color: var(--green); }
-    .pill.no     { background: var(--gray-100); color: var(--gray-400); }
-    .pill.partial{ background: var(--amber-pale); color: var(--amber); }
+    .pill.yes     { background: var(--green-pale); color: var(--green); }
+    .pill.no      { background: var(--gray-100); color: var(--gray-400); }
+    .pill.partial { background: var(--amber-pale); color: var(--amber); }
 
-    /* ── Threat rows ── */
+    /* ── Threat rows ───────────────────────────────────────────────────────── */
     .threat {
-      display: flex; gap: 16px; align-items: flex-start;
+      display: flex; gap: 18px; align-items: flex-start;
       background: white; border: 1px solid var(--gray-200);
-      border-radius: 8px; padding: 16px 18px;
-      margin-bottom: 10px;
+      border-radius: 12px; padding: 18px 20px;
+      margin-bottom: 10px; box-shadow: var(--shadow-sm);
+      transition: transform .2s, box-shadow .2s;
     }
+    .threat:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
     .threat-badge {
-      flex-shrink: 0; border-radius: 6px; padding: 6px 10px;
+      flex-shrink: 0; border-radius: 8px; padding: 8px 12px;
       font-size: 10px; font-weight: 700; letter-spacing: .5px;
       text-transform: uppercase; color: white; text-align: center;
-      min-width: 80px;
+      min-width: 82px; line-height: 1.3;
     }
-    .threat h3 { font-size: 14px; margin-bottom: 4px; }
-    .threat p  { font-size: 13px; color: var(--gray-600); }
+    .threat h3 { font-size: 15px; font-weight: 700; margin-bottom: 5px; color: var(--gray-800); }
+    .threat p  { font-size: 13px; color: var(--gray-500); line-height: 1.6; }
 
-    /* ── Horizon cards ── */
-    .horizons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    /* ── Horizon cards ─────────────────────────────────────────────────────── */
+    .horizons { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
     @media (max-width: 700px) { .horizons { grid-template-columns: 1fr; } }
-    .horizon { border-radius: 10px; overflow: hidden; border: 1px solid var(--gray-200); }
-    .horizon-header { padding: 16px 18px; color: white; }
-    .horizon-header .timeframe { font-size: 26px; font-weight: 900; line-height: 1; margin-bottom: 2px; }
-    .horizon-header .label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; opacity: .8; }
-    .horizon-body { padding: 16px 18px; background: white; }
-    .horizon-body li {
-      font-size: 13px; color: var(--gray-600);
-      margin-bottom: 10px; padding-left: 18px; position: relative;
-      list-style: none;
+    .horizon {
+      border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--gray-200); box-shadow: var(--shadow-sm);
+      transition: transform .2s, box-shadow .2s;
     }
+    .horizon:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .horizon-header { padding: 20px; color: white; }
+    .horizon-header .timeframe {
+      font-size: 36px; font-weight: 900; line-height: 1;
+      letter-spacing: -1px; margin-bottom: 4px;
+    }
+    .horizon-header .label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; opacity: .75; }
+    .horizon-body { padding: 18px 20px; background: white; }
+    .horizon-body li {
+      font-size: 13px; color: var(--gray-600); margin-bottom: 12px;
+      padding-left: 20px; position: relative; list-style: none; line-height: 1.5;
+    }
+    .horizon-body li:last-child { margin-bottom: 0; }
     .horizon-body li::before {
-      content: "";
-      position: absolute; left: 0; top: 7px;
+      content: ""; position: absolute; left: 0; top: 6px;
       width: 8px; height: 8px; border-radius: 50%;
     }
+    .horizons .horizon:nth-child(1) .horizon-body li::before { background: var(--red); }
+    .horizons .horizon:nth-child(2) .horizon-body li::before { background: var(--amber); }
+    .horizons .horizon:nth-child(3) .horizon-body li::before { background: var(--green); }
 
-    /* ── Pricing bars ── */
-    .pricing-bars { background: white; border: 1px solid var(--gray-200); border-radius: 10px; padding: 24px; }
-    .bar-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-    .bar-row:last-child { margin-bottom: 0; }
-    .bar-name { width: 80px; font-size: 13px; font-weight: 600; flex-shrink: 0; }
-    .bar-track { flex: 1; height: 28px; background: var(--gray-100); border-radius: 4px; overflow: hidden; }
-    .bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 10px; }
+    /* ── Pricing bars ──────────────────────────────────────────────────────── */
+    .pricing-wrap {
+      background: white; border: 1px solid var(--gray-200);
+      border-radius: 14px; padding: 28px; box-shadow: var(--shadow-sm);
+    }
+    .pricing-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--gray-400); margin-bottom: 22px;
+    }
+    .bar-row { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+    .bar-row:last-of-type { margin-bottom: 0; }
+    .bar-name { width: 76px; font-size: 13px; font-weight: 600; color: var(--gray-800); flex-shrink: 0; }
+    .bar-track {
+      flex: 1; height: 32px; background: var(--gray-100);
+      border-radius: 6px; overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%; border-radius: 6px;
+      display: flex; align-items: center; padding-left: 12px;
+      width: 0; transition: width 1s cubic-bezier(.4,0,.2,1);
+    }
     .bar-fill span { font-size: 12px; font-weight: 700; color: white; white-space: nowrap; }
     .pricing-insight {
-      margin-top: 20px; padding: 14px 16px;
-      background: var(--blue-pale); border-left: 4px solid var(--blue);
-      border-radius: 0 8px 8px 0; font-size: 13px; color: var(--navy);
+      margin-top: 22px; padding: 16px 18px;
+      background: var(--blue-pale); border-left: 3px solid var(--blue);
+      border-radius: 0 10px 10px 0; font-size: 13px; color: var(--navy); line-height: 1.6;
     }
 
-    /* ── Files grid ── */
+    /* ── Files grid ────────────────────────────────────────────────────────── */
     .files { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     @media (max-width: 580px) { .files { grid-template-columns: 1fr; } }
     .file-card {
       background: white; border: 1px solid var(--gray-200);
-      border-radius: 8px; padding: 14px 16px;
-      display: flex; gap: 12px; align-items: flex-start;
+      border-radius: 12px; padding: 16px 18px;
+      display: flex; gap: 14px; align-items: flex-start;
+      box-shadow: var(--shadow-sm);
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .file-card:hover {
+      transform: translateY(-2px); box-shadow: var(--shadow-md);
+      border-color: #bfdbfe; text-decoration: none;
     }
     .file-icon {
-      font-size: 20px; flex-shrink: 0; margin-top: 1px;
+      width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; background: var(--gray-100);
     }
-    .file-card h3 { font-size: 13px; margin-bottom: 3px; }
-    .file-card p  { font-size: 12px; color: var(--gray-400); }
+    .file-card h3 { font-size: 13px; font-weight: 700; margin-bottom: 3px; color: var(--gray-800); }
+    .file-card p  { font-size: 12px; color: var(--gray-400); line-height: 1.5; }
 
+    /* ── Footer ────────────────────────────────────────────────────────────── */
     footer {
-      background: var(--navy); color: rgba(255,255,255,.35);
-      text-align: center; font-size: 12px; padding: 24px 40px;
+      background: var(--navy); color: rgba(255,255,255,.25);
+      padding: 28px 32px; text-align: center; font-size: 12px;
     }
+    footer a { color: rgba(255,255,255,.4); }
+    footer a:hover { color: rgba(255,255,255,.7); }
   </style>
 </head>
 <body>
 
+<!-- ── Nav ────────────────────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-dot"></div>
+      Task<span>Flow</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#summary">Summary</a></li>
+      <li><a href="#landscape">Landscape</a></li>
+      <li><a href="#threats">Threats</a></li>
+      <li><a href="#strategy">Strategy</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#files">Files</a></li>
+    </ul>
+  </div>
+</nav>
+
 <!-- ── Hero ───────────────────────────────────────────────────────────────── -->
 <div class="hero">
+  <div class="hero-dots"></div>
   <div class="hero-inner">
-    <div class="logo">
-      <div class="logo-icon">
-        <div class="logo-row">
-          <div class="logo-check"></div>
-          <div class="logo-line" style="width:20px"></div>
+    <div>
+      <div class="logo">
+        <div class="logo-icon">
+          <div class="logo-row"><div class="logo-check"></div><div class="logo-line" style="width:18px"></div></div>
+          <div class="logo-row"><div class="logo-check"></div><div class="logo-line" style="width:14px"></div></div>
+          <div class="logo-row"><div class="logo-check"></div><div class="logo-line" style="width:11px"></div></div>
         </div>
-        <div class="logo-row">
-          <div class="logo-check"></div>
-          <div class="logo-line" style="width:16px"></div>
-        </div>
-        <div class="logo-row">
-          <div class="logo-check"></div>
-          <div class="logo-line" style="width:12px"></div>
-        </div>
+        <div class="logo-wordmark">Task<span>Flow</span></div>
       </div>
-      <div class="logo-wordmark">Task<span>Flow</span></div>
+      <div class="badge">Confidential · Exec Team</div>
+      <h1>AI <em>Competitive</em><br>Response Strategy</h1>
+      <p class="hero-sub">Market landscape, threat assessment, and recommended actions for TaskFlow leadership in response to competitor AI chat launches.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="taskflow-ai-strategy.pdf">⬇ Download PDF</a>
+        <a class="btn btn-ghost" href="taskflow-ai-strategy.pptx">⬇ PowerPoint</a>
+      </div>
+      <div class="hero-meta">
+        <span>Prepared for Sarah Chen, CEO</span>
+        <span>March 2025</span>
+        <span>Covers: Asana · Linear · Monday · ClickUp · Notion</span>
+      </div>
     </div>
-
-    <div class="badge">Confidential · Exec Team</div>
-    <h1>AI <span>Competitive</span><br>Response Strategy</h1>
-    <p>Market landscape, threat assessment, and recommended actions for TaskFlow leadership — March 2025.</p>
-    <div class="hero-meta">Prepared for Sarah Chen, CEO &nbsp;·&nbsp; Research covers Asana, Linear, Monday.com, ClickUp, Notion</div>
-  </div>
-</div>
-
-<!-- ── Download bar ────────────────────────────────────────────────────────── -->
-<div class="download-bar">
-  <div class="download-bar-inner">
-    <p>Download the full presentation</p>
-    <a class="btn btn-white" href="taskflow-ai-strategy.pdf">⬇ PDF</a>
-    <a class="btn btn-outline" href="taskflow-ai-strategy.pptx">⬇ PPTX</a>
+    <div class="hero-stats-card">
+      <div class="hero-stat">
+        <div class="hero-stat-num" style="color:#93c5fd">5 of 5</div>
+        <div class="hero-stat-label">competitors have<br>some form of AI chat</div>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" style="color:#fca5a5">30–90</div>
+        <div class="hero-stat-label">days before churn<br>risk peaks</div>
+      </div>
+      <div class="hero-stat-divider"></div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" style="color:#fcd34d">$280</div>
+        <div class="hero-stat-label">max monthly AI cost<br>for a 10-person team</div>
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="page">
 
   <!-- ── Executive Summary ─────────────────────────────────────────────────── -->
-  <section>
-    <div class="section-label">Overview</div>
+  <section id="summary">
+    <div class="section-eyebrow">Overview</div>
     <h2>Executive Summary</h2>
-
-    <div class="stats">
+    <div class="stats fade-in">
       <div class="stat-card blue">
         <div class="stat-number">5 of 5</div>
         <div class="stat-label">competitors now have some form of AI chat</div>
       </div>
       <div class="stat-card red">
         <div class="stat-number">30–90</div>
-        <div class="stat-label">days before AI-driven churn risk peaks</div>
+        <div class="stat-label">days before AI-driven churn risk peaks at renewal</div>
       </div>
       <div class="stat-card amber">
         <div class="stat-number">$200–280</div>
-        <div class="stat-label">per month what competitors charge a 10-person team for AI</div>
+        <div class="stat-label">monthly AI cost for a 10-person team at competitors</div>
       </div>
     </div>
-
-    <div class="takeaways">
+    <div class="takeaways fade-in">
       <div class="takeaway">
-        <div class="takeaway-dot" style="background:var(--blue)"></div>
+        <div class="takeaway-dot" style="background:#eff6ff">💡</div>
         <div>
           <strong>AI is now a purchase criterion</strong>
           <p>Buyers ask "what AI?" before "what price?" — this market shift happened in 2024.</p>
         </div>
       </div>
       <div class="takeaway">
-        <div class="takeaway-dot" style="background:var(--amber)"></div>
+        <div class="takeaway-dot" style="background:#fffbeb">⏱</div>
         <div>
           <strong>The window is not closed</strong>
-          <p>Churn happens at renewal. TaskFlow has 30–90 days to communicate a credible roadmap.</p>
+          <p>Churn happens at renewal. TaskFlow has 30–90 days to communicate a credible AI roadmap.</p>
         </div>
       </div>
       <div class="takeaway">
-        <div class="takeaway-dot" style="background:var(--red)"></div>
+        <div class="takeaway-dot" style="background:#fef2f2">🎯</div>
         <div>
           <strong>ClickUp Brain is threat #1</strong>
           <p>Most mature "chat with your work" product — direct overlap with TaskFlow's core use case.</p>
         </div>
       </div>
       <div class="takeaway">
-        <div class="takeaway-dot" style="background:var(--green)"></div>
+        <div class="takeaway-dot" style="background:#ecfdf5">💰</div>
         <div>
           <strong>A pricing wedge exists</strong>
           <p>Every competitor charges extra for AI. TaskFlow can own "AI that doesn't nickel-and-dime you."</p>
@@ -428,175 +549,105 @@
     </div>
   </section>
 
-  <!-- ── Competitive Landscape ─────────────────────────────────────────────── -->
-  <section>
-    <div class="section-label">Competitive Landscape</div>
+  <!-- ── Landscape ──────────────────────────────────────────────────────────── -->
+  <section id="landscape">
+    <div class="section-eyebrow">Competitive Landscape</div>
     <h2>Where Every Competitor Stands</h2>
+    <div class="fade-in">
+      <div class="tier">
+        <div class="tier-header">
+          <span class="tier-badge" style="background:var(--red)">Tier 1 — Full AI Platform</span>
+          <span class="tier-tools">ClickUp Brain &nbsp;·&nbsp; Notion AI + Q&A</span>
+        </div>
+        <div class="tier-body">Cross-workspace knowledge indexing · Conversational AI chat · Autonomous agents · Meeting intelligence</div>
+      </div>
+      <div class="tier">
+        <div class="tier-header">
+          <span class="tier-badge" style="background:var(--amber)">Tier 2 — Strong / Enterprise</span>
+          <span class="tier-tools">Asana AI Teammates &nbsp;·&nbsp; Monday.com AI</span>
+        </div>
+        <div class="tier-body">Enterprise-grade automations · Microsoft 365 Copilot integration · Conversational onboarding agents</div>
+      </div>
+      <div class="tier">
+        <div class="tier-header">
+          <span class="tier-badge" style="background:var(--green)">Tier 3 — Niche / Developer</span>
+          <span class="tier-tools">Linear + GitHub Copilot</span>
+        </div>
+        <div class="tier-body">Best-in-class for engineering teams only · No general-purpose AI chat for business users</div>
+      </div>
+    </div>
 
-    <div class="tier">
-      <div class="tier-header">
-        <span class="tier-badge" style="background:var(--red)">Tier 1 — Full AI Platform</span>
-        <span class="tier-tools">ClickUp Brain &nbsp;·&nbsp; Notion AI + Q&A</span>
-      </div>
-      <div class="tier-body">Cross-workspace knowledge indexing · Conversational AI chat · Autonomous agents · Meeting intelligence</div>
-    </div>
-    <div class="tier">
-      <div class="tier-header">
-        <span class="tier-badge" style="background:var(--amber)">Tier 2 — Strong / Enterprise</span>
-        <span class="tier-tools">Asana AI Teammates &nbsp;·&nbsp; Monday.com AI</span>
-      </div>
-      <div class="tier-body">Enterprise-grade automations · Microsoft 365 Copilot integration · Conversational onboarding agents</div>
-    </div>
-    <div class="tier">
-      <div class="tier-header">
-        <span class="tier-badge" style="background:var(--green)">Tier 3 — Niche / Developer</span>
-        <span class="tier-tools">Linear + GitHub Copilot</span>
-      </div>
-      <div class="tier-body">Best-in-class for engineering teams only · No general-purpose AI chat for business users</div>
-    </div>
-  </section>
-
-  <!-- ── Feature Table ──────────────────────────────────────────────────────── -->
-  <section>
-    <div class="section-label">Competitive Landscape</div>
+    <br>
+    <div class="section-eyebrow" style="margin-top:8px">Feature Matrix</div>
     <h2>AI Feature Comparison</h2>
-    <div class="table-wrap">
+    <div class="table-wrap fade-in">
       <table>
         <thead>
           <tr>
-            <th>Feature</th>
-            <th>Asana</th>
-            <th>Linear</th>
-            <th>Monday</th>
-            <th>ClickUp</th>
-            <th>Notion</th>
+            <th>Feature</th><th>Asana</th><th>Linear</th><th>Monday</th><th>ClickUp</th><th>Notion</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Chat with tasks/work</td>
-            <td><span class="pill yes">Yes</span></td>
-            <td><span class="pill no">No</span></td>
-            <td><span class="pill partial">Partial</span></td>
-            <td><span class="pill yes">Yes</span></td>
-            <td><span class="pill yes">Yes</span></td>
-          </tr>
-          <tr>
-            <td>AI automations</td>
-            <td><span class="pill yes">Yes</span></td>
-            <td><span class="pill no">No</span></td>
-            <td><span class="pill yes">Yes</span></td>
-            <td><span class="pill yes">Yes</span></td>
-            <td><span class="pill partial">Partial</span></td>
-          </tr>
-          <tr>
-            <td>Autonomous AI agents</td>
-            <td><span class="pill partial">Yes β</span></td>
-            <td><span class="pill partial">Partial</span></td>
-            <td><span class="pill yes">Yes</span></td>
-            <td><span class="pill yes">Yes</span></td>
-            <td><span class="pill yes">Yes</span></td>
-          </tr>
-          <tr>
-            <td>Meeting intelligence</td>
-            <td><span class="pill no">No</span></td>
-            <td><span class="pill no">No</span></td>
-            <td><span class="pill no">No</span></td>
-            <td><span class="pill yes">Yes</span></td>
-            <td><span class="pill yes">Yes</span></td>
-          </tr>
-          <tr>
-            <td>Cross-platform context</td>
-            <td><span class="pill yes">M365 / GPT</span></td>
-            <td><span class="pill partial">GitHub</span></td>
-            <td><span class="pill partial">Limited</span></td>
-            <td><span class="pill yes">Slack / Drive</span></td>
-            <td><span class="pill yes">Slack / Drive</span></td>
-          </tr>
-          <tr>
-            <td>Multi-model AI</td>
-            <td><span class="pill no">No</span></td>
-            <td><span class="pill no">No</span></td>
-            <td><span class="pill no">No</span></td>
-            <td><span class="pill yes">GPT · Claude · o3</span></td>
-            <td><span class="pill no">No</span></td>
-          </tr>
-          <tr>
-            <td>Enterprise AI security</td>
-            <td><span class="pill yes">DLP / EKM</span></td>
-            <td><span class="pill no">No</span></td>
-            <td><span class="pill yes">Yes</span></td>
-            <td><span class="pill yes">Yes</span></td>
-            <td><span class="pill yes">Yes</span></td>
-          </tr>
+          <tr><td>Chat with tasks/work</td><td><span class="pill yes">Yes</span></td><td><span class="pill no">No</span></td><td><span class="pill partial">Partial</span></td><td><span class="pill yes">Yes</span></td><td><span class="pill yes">Yes</span></td></tr>
+          <tr><td>AI automations</td><td><span class="pill yes">Yes</span></td><td><span class="pill no">No</span></td><td><span class="pill yes">Yes</span></td><td><span class="pill yes">Yes</span></td><td><span class="pill partial">Partial</span></td></tr>
+          <tr><td>Autonomous AI agents</td><td><span class="pill partial">Yes β</span></td><td><span class="pill partial">Partial</span></td><td><span class="pill yes">Yes</span></td><td><span class="pill yes">Yes</span></td><td><span class="pill yes">Yes</span></td></tr>
+          <tr><td>Meeting intelligence</td><td><span class="pill no">No</span></td><td><span class="pill no">No</span></td><td><span class="pill no">No</span></td><td><span class="pill yes">Yes</span></td><td><span class="pill yes">Yes</span></td></tr>
+          <tr><td>Cross-platform context</td><td><span class="pill yes">M365 / GPT</span></td><td><span class="pill partial">GitHub</span></td><td><span class="pill partial">Limited</span></td><td><span class="pill yes">Slack / Drive</span></td><td><span class="pill yes">Slack / Drive</span></td></tr>
+          <tr><td>Multi-model AI</td><td><span class="pill no">No</span></td><td><span class="pill no">No</span></td><td><span class="pill no">No</span></td><td><span class="pill yes">GPT · Claude · o3</span></td><td><span class="pill no">No</span></td></tr>
+          <tr><td>Enterprise AI security</td><td><span class="pill yes">DLP / EKM</span></td><td><span class="pill no">No</span></td><td><span class="pill yes">Yes</span></td><td><span class="pill yes">Yes</span></td><td><span class="pill yes">Yes</span></td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- ── Threat Assessment ──────────────────────────────────────────────────── -->
-  <section>
-    <div class="section-label">Threat Assessment</div>
+  <!-- ── Threats ────────────────────────────────────────────────────────────── -->
+  <section id="threats">
+    <div class="section-eyebrow">Threat Assessment</div>
     <h2>Who Poses the Biggest Risk?</h2>
-
-    <div class="threat">
-      <div class="threat-badge" style="background:var(--red)">Very High</div>
-      <div>
-        <h3>ClickUp Brain</h3>
-        <p>Most comprehensive "chat with your work" product on the market. Cross-workspace indexing, multi-model AI (GPT-5, Claude, o3), and Meeting Notetaker. Direct, head-on overlap with TaskFlow's core use case.</p>
+    <div class="fade-in">
+      <div class="threat">
+        <div class="threat-badge" style="background:var(--red)">Very<br>High</div>
+        <div><h3>ClickUp Brain</h3><p>Most comprehensive "chat with your work" product on the market. Cross-workspace indexing, multi-model AI (GPT-5, Claude, o3), and Meeting Notetaker. Direct, head-on overlap with TaskFlow's core use case.</p></div>
       </div>
-    </div>
-    <div class="threat">
-      <div class="threat-badge" style="background:var(--red)">High</div>
-      <div>
-        <h3>Notion AI Q&A</h3>
-        <p>Best Q&A for knowledge-heavy teams. AI Agents (3.0) execute autonomous multi-step workflows. Cross-platform context from Slack, Google Drive, and Teams. Risk: users consolidate onto one AI-powered platform.</p>
+      <div class="threat">
+        <div class="threat-badge" style="background:var(--red)">High</div>
+        <div><h3>Notion AI Q&A</h3><p>Best Q&A for knowledge-heavy teams. AI Agents (3.0) execute autonomous multi-step workflows. Cross-platform context from Slack, Google Drive, and Teams. Risk: users consolidate onto one AI-powered platform.</p></div>
       </div>
-    </div>
-    <div class="threat">
-      <div class="threat-badge" style="background:var(--red)">High</div>
-      <div>
-        <h3>Asana AI Teammates</h3>
-        <p>Enterprise-grade with Microsoft 365 Copilot integration. AI Teammates in beta represent a qualitative new experience. Strong enterprise sales motion targeting TaskFlow accounts.</p>
+      <div class="threat">
+        <div class="threat-badge" style="background:var(--red)">High</div>
+        <div><h3>Asana AI Teammates</h3><p>Enterprise-grade with Microsoft 365 Copilot integration. AI Teammates in beta represent a qualitative new experience. Strong enterprise sales motion targeting TaskFlow accounts.</p></div>
       </div>
-    </div>
-    <div class="threat">
-      <div class="threat-badge" style="background:var(--amber)">High (Ent.)</div>
-      <div>
-        <h3>Monday.com AI</h3>
-        <p>$1.2B 2025 revenue target with AI central to growth strategy. Monday Expert conversational agent launched March 2025. Biggest threat for enterprise and mid-market customers.</p>
+      <div class="threat">
+        <div class="threat-badge" style="background:var(--amber)">High<br>(Ent.)</div>
+        <div><h3>Monday.com AI</h3><p>$1.2B 2025 revenue target with AI central to growth strategy. Monday Expert conversational agent launched March 2025. Biggest threat for enterprise and mid-market customers.</p></div>
       </div>
-    </div>
-    <div class="threat">
-      <div class="threat-badge" style="background:var(--amber)">Medium</div>
-      <div>
-        <h3>Linear + GitHub Copilot</h3>
-        <p>Engineering-team-only threat via GitHub Copilot agent integration. No meaningful risk for general business users or non-technical teams.</p>
+      <div class="threat">
+        <div class="threat-badge" style="background:var(--gray-400)">Medium</div>
+        <div><h3>Linear + GitHub Copilot</h3><p>Engineering-team-only threat via GitHub Copilot agent integration. No meaningful risk for general business users or non-technical teams.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ── Response Plan ──────────────────────────────────────────────────────── -->
-  <section>
-    <div class="section-label">Response Strategy</div>
+  <!-- ── Strategy ───────────────────────────────────────────────────────────── -->
+  <section id="strategy">
+    <div class="section-eyebrow">Response Strategy</div>
     <h2>Three-Horizon Response Plan</h2>
-
-    <div class="horizons">
+    <div class="horizons fade-in">
       <div class="horizon">
-        <div class="horizon-header" style="background:var(--red)">
+        <div class="horizon-header" style="background:linear-gradient(135deg,#dc2626,#b91c1c)">
           <div class="timeframe">0–30</div>
           <div class="label">Days · Immediate</div>
         </div>
         <div class="horizon-body">
           <ul>
-            <li style="--dot:var(--red)">CEO email to all customers with AI roadmap preview</li>
+            <li>CEO email to all customers with AI roadmap preview</li>
             <li>Sales battle card with objection handlers for every competitor</li>
             <li>Remove all "no AI / simple / no bloat" messaging</li>
           </ul>
         </div>
       </div>
       <div class="horizon">
-        <div class="horizon-header" style="background:var(--amber)">
+        <div class="horizon-header" style="background:linear-gradient(135deg,#b45309,#92400e)">
           <div class="timeframe">30–90</div>
           <div class="label">Days · Short-term</div>
         </div>
@@ -609,7 +660,7 @@
         </div>
       </div>
       <div class="horizon">
-        <div class="horizon-header" style="background:var(--green)">
+        <div class="horizon-header" style="background:linear-gradient(135deg,#047857,#065f46)">
           <div class="timeframe">90+</div>
           <div class="label">Days · Long-term</div>
         </div>
@@ -622,40 +673,33 @@
         </div>
       </div>
     </div>
-
-    <style>
-      .horizon-body li::before { background: var(--blue); }
-      .horizons .horizon:nth-child(1) .horizon-body li::before { background: var(--red); }
-      .horizons .horizon:nth-child(2) .horizon-body li::before { background: var(--amber); }
-      .horizons .horizon:nth-child(3) .horizon-body li::before { background: var(--green); }
-    </style>
   </section>
 
   <!-- ── Pricing ────────────────────────────────────────────────────────────── -->
-  <section>
-    <div class="section-label">Strategic Opportunity</div>
+  <section id="pricing">
+    <div class="section-eyebrow">Strategic Opportunity</div>
     <h2>The AI Pricing Gap</h2>
-    <div class="pricing-bars">
-      <p style="font-size:13px;color:var(--gray-400);margin-bottom:18px;font-weight:600">Monthly AI cost · 10-person team</p>
+    <div class="pricing-wrap fade-in" id="pricing-section">
+      <div class="pricing-label">Monthly AI cost · 10-person team</div>
       <div class="bar-row">
         <div class="bar-name">ClickUp</div>
-        <div class="bar-track"><div class="bar-fill" style="width:100%;background:var(--red)"><span>~$280/mo</span></div></div>
+        <div class="bar-track"><div class="bar-fill" data-width="100" style="background:var(--red)"><span>~$280/mo</span></div></div>
       </div>
       <div class="bar-row">
         <div class="bar-name">Asana</div>
-        <div class="bar-track"><div class="bar-fill" style="width:89%;background:var(--red)"><span>~$250/mo</span></div></div>
+        <div class="bar-track"><div class="bar-fill" data-width="89" style="background:var(--red)"><span>~$250/mo</span></div></div>
       </div>
       <div class="bar-row">
         <div class="bar-name">Notion</div>
-        <div class="bar-track"><div class="bar-fill" style="width:71%;background:var(--red)"><span>~$200/mo</span></div></div>
+        <div class="bar-track"><div class="bar-fill" data-width="71" style="background:var(--red)"><span>~$200/mo</span></div></div>
       </div>
       <div class="bar-row">
         <div class="bar-name">Monday</div>
-        <div class="bar-track"><div class="bar-fill" style="width:71%;background:var(--amber)"><span>~$200/mo</span></div></div>
+        <div class="bar-track"><div class="bar-fill" data-width="71" style="background:var(--amber)"><span>~$200/mo</span></div></div>
       </div>
       <div class="bar-row">
         <div class="bar-name">Linear</div>
-        <div class="bar-track"><div class="bar-fill" style="width:50%;background:var(--amber)"><span>~$140/mo</span></div></div>
+        <div class="bar-track"><div class="bar-fill" data-width="50" style="background:var(--gray-400)"><span>~$140/mo</span></div></div>
       </div>
       <div class="pricing-insight">
         <strong>Key insight:</strong> No competitor offers meaningful AI for free. All charge $15–28/user/month extra.
@@ -665,74 +709,77 @@
   </section>
 
   <!-- ── Files ──────────────────────────────────────────────────────────────── -->
-  <section>
-    <div class="section-label">Research Files</div>
+  <section id="files">
+    <div class="section-eyebrow">Research Files</div>
     <h2>Full Research &amp; Reports</h2>
-    <div class="files">
+    <div class="files fade-in">
       <a class="file-card" href="taskflow-ai-response-strategy.md">
         <div class="file-icon">📋</div>
-        <div>
-          <h3>AI Response Strategy</h3>
-          <p>0–30–90 day plan · CEO talking points · Decision framework</p>
-        </div>
+        <div><h3>AI Response Strategy</h3><p>0–30–90 day plan · CEO talking points · Decision framework</p></div>
       </a>
       <a class="file-card" href="competitive-ai-landscape.md">
-        <div class="file-icon">🗺</div>
-        <div>
-          <h3>Competitive Landscape</h3>
-          <p>Feature comparison · Maturity tiers · Pricing analysis</p>
-        </div>
+        <div class="file-icon">🗺️</div>
+        <div><h3>Competitive Landscape</h3><p>Feature comparison · Maturity tiers · Pricing analysis</p></div>
       </a>
       <a class="file-card" href="competitor-ai-clickup.md">
-        <div class="file-icon">🔴</div>
-        <div>
-          <h3>ClickUp Brain</h3>
-          <p>Threat: Very High · Full workspace AI · Multi-model</p>
-        </div>
+        <div class="file-icon" style="background:#fef2f2">🔴</div>
+        <div><h3>ClickUp Brain</h3><p>Threat: Very High · Full workspace AI · Multi-model</p></div>
       </a>
       <a class="file-card" href="competitor-ai-asana.md">
-        <div class="file-icon">🔴</div>
-        <div>
-          <h3>Asana AI</h3>
-          <p>Threat: High · AI Teammates · M365 Copilot integration</p>
-        </div>
+        <div class="file-icon" style="background:#fef2f2">🔴</div>
+        <div><h3>Asana AI</h3><p>Threat: High · AI Teammates · M365 Copilot integration</p></div>
       </a>
       <a class="file-card" href="competitor-ai-notion.md">
-        <div class="file-icon">🔴</div>
-        <div>
-          <h3>Notion AI</h3>
-          <p>Threat: High · Q&amp;A · AI Agents 3.0 · Cross-platform</p>
-        </div>
+        <div class="file-icon" style="background:#fef2f2">🔴</div>
+        <div><h3>Notion AI</h3><p>Threat: High · Q&amp;A · AI Agents 3.0 · Cross-platform</p></div>
       </a>
       <a class="file-card" href="competitor-ai-monday.md">
-        <div class="file-icon">🟠</div>
-        <div>
-          <h3>Monday.com AI</h3>
-          <p>Threat: High (Enterprise) · Monday Expert · AI Blocks</p>
-        </div>
+        <div class="file-icon" style="background:#fffbeb">🟠</div>
+        <div><h3>Monday.com AI</h3><p>Threat: High (Enterprise) · Monday Expert · AI Blocks</p></div>
       </a>
       <a class="file-card" href="competitor-ai-linear.md">
-        <div class="file-icon">🟡</div>
-        <div>
-          <h3>Linear + Copilot</h3>
-          <p>Threat: Medium · GitHub Copilot · Engineering teams only</p>
-        </div>
+        <div class="file-icon" style="background:#f9fafb">⚪</div>
+        <div><h3>Linear + Copilot</h3><p>Threat: Medium · GitHub Copilot · Engineering teams only</p></div>
       </a>
       <a class="file-card" href="taskflow-ai-strategy.pdf">
-        <div class="file-icon">📄</div>
-        <div>
-          <h3>Presentation (PDF)</h3>
-          <p>17 slides · Executive deck · Print-ready</p>
-        </div>
+        <div class="file-icon" style="background:#eff6ff">📄</div>
+        <div><h3>Presentation (PDF)</h3><p>17 slides · Executive deck · Print-ready</p></div>
       </a>
     </div>
   </section>
 
 </div>
 
+<!-- ── Footer ─────────────────────────────────────────────────────────────── -->
 <footer>
   TaskFlow &nbsp;·&nbsp; AI Competitive Response Strategy &nbsp;·&nbsp; March 2025 &nbsp;·&nbsp; Confidential
+  &nbsp;&nbsp;|&nbsp;&nbsp;
+  <a href="https://github.com/balya43566/taskflow-ai-strategy">GitHub</a>
 </footer>
+
+<script>
+  // Scroll-triggered fade-ins
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Animated pricing bars
+  const barObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.bar-fill').forEach(bar => {
+          bar.style.width = bar.dataset.width + '%';
+        });
+        barObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  const pricingSection = document.getElementById('pricing-section');
+  if (pricingSection) barObserver.observe(pricingSection);
+</script>
 
 </body>
 </html>
